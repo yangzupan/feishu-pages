@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "lib": ["es2021"],
+    "noImplicitAny": false,
+    "moduleResolution": "bundler",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}

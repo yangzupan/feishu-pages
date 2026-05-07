@@ -1,0 +1,24 @@
+{
+  "name": "feishu-pages-tool",
+  "private": true,
+  "description": "飞书文档和页面处理工具",
+  "author": {
+    "name": "Pange Team"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yangzupan/feishu-pages"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "build": "pnpm -F feishu-docx build",
+    "test": "pnpm -F feishu-docx test && pnpm -F feishu-pages test",
+    "export": "pnpm -F feishu-pages dev",
+    "dev": "pnpm -F website dev",
+    "clean": "rm -Rf dist/"
+  },
+  "devDependencies": {
+    "autocorrect-node": "^2.8.4"
+  }
+}
