@@ -381,7 +381,7 @@ find ./dist -name "*-board.png" -exec mogrify -trim {} +
 3. 检查是否在 frontmatter 中正确设置了 `slug`
 
 ## 📚 相关项目
-
+- [feishu-pages](https://github.com/longbridge/feishu-pages) 参考项目
 - **[@pange/feishu-docx](./packages/feishu-docx/README.md)** - 飞书文档转换核心库,支持将飞书新版文档 Docx 转换为 Markdown 格式
 - **[@pange/feishu-pages](./packages/feishu-pages/README.md)** - 飞书知识库导出工具,将整个知识库导出为 Markdown 文件并组织目录结构
 - **[VitePress](https://vitepress.dev/)** - 推荐的静态站点生成器
