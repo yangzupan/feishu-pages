@@ -5,8 +5,5 @@ packages:
 catalog:
   "@types/node": "^25.7.0"
   "typescript": "^6.0.3"
-  "js-yaml": "^4.1.1"
-  "marked": "^18.0.3"
-  "marked-xhtml": "^1.0.15"
   "tsup": "^8.5.1"
   "vitepress": "^1.6.4"

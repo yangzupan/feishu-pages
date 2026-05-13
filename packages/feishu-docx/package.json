@@ -1,6 +1,6 @@
 {
   "name": "@pange/feishu-docx",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "将飞书文档转换为其他格式（Markdown、HTML等）",
   "keywords": [
     "feishu",
@@ -32,10 +32,10 @@
     "release": "pnpm build && npm publish --access public"
   },
   "dependencies": {
-    "js-yaml": "catalog:",
+    "js-yaml": "^4.1.1",
     "jsdom": "^29.1.1",
-    "marked": "catalog:",
-    "marked-xhtml": "catalog:"
+    "marked": "^18.0.3",
+    "marked-xhtml": "^1.0.15"
   },
   "devDependencies": {
     "@types/node": "catalog:",

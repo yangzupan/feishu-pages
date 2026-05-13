@@ -1,6 +1,6 @@
 {
   "name": "@pange/feishu-pages",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "将飞书Wiki生成为Markdown，用于配合静态页面生成器使用",
   "keywords": [
     "feishu",
@@ -32,12 +32,12 @@
   },
   "dependencies": {
     "@larksuiteoapi/node-sdk": "^1.63.1",
-    "@pange/feishu-docx": "workspace:*",
+    "@pange/feishu-docx": "^0.1.4",
     "axios": "^1.16.0",
     "dotenv": "^17.4.2",
-    "js-yaml": "catalog:",
-    "marked": "catalog:",
-    "marked-xhtml": "catalog:",
+    "js-yaml": "^4.1.1",
+    "marked": "^18.0.3",
+    "marked-xhtml": "^1.0.15",
     "mime-types": "^3.0.2"
   },
   "devDependencies": {
