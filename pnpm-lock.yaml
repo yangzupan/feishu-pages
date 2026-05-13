@@ -12,7 +12,38 @@ importers:
         specifier: ^2.8.4
         version: 2.14.0
 
-  feishu-docx:
+  apps/vitepress-demo:
+    dependencies:
+      '@pange/feishu-pages':
+        specifier: workspace:*
+        version: link:../../packages/feishu-pages
+      markdown-it-mathjax3:
+        specifier: ^4.3.2
+        version: 4.3.2
+      node-fetch:
+        specifier: ^2
+        version: 2.7.0
+      tailwindcss:
+        specifier: ^3.3.3
+        version: 3.4.19
+    devDependencies:
+      '@types/node-fetch':
+        specifier: ^2.6.9
+        version: 2.6.13
+      autoprefixer:
+        specifier: ^10.4.15
+        version: 10.5.0(postcss@8.5.14)
+      postcss:
+        specifier: ^8.4.30
+        version: 8.5.14
+      sass:
+        specifier: ^1.67.0
+        version: 1.99.0
+      vitepress:
+        specifier: ^1.4.1
+        version: 1.6.4(@algolia/client-search@5.52.1)(@types/node@20.19.39)(axios@1.16.0)(markdown-it-mathjax3@4.3.2)(postcss@8.5.14)(sass@1.99.0)(search-insights@2.17.3)(typescript@5.9.3)
+
+  packages/feishu-docx:
     dependencies:
       '@types/node':
         specifier: ^20.5.7
@@ -49,7 +80,7 @@ importers:
         specifier: ^29.1.1
         version: 29.4.9(@babel/core@7.29.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@29.7.0)(jest@29.7.0(@types/node@20.19.39))(typescript@5.9.3)
 
-  feishu-pages:
+  packages/feishu-pages:
     dependencies:
       '@larksuiteoapi/node-sdk':
         specifier: ^1.20.0
@@ -91,34 +122,6 @@ importers:
       ts-jest:
         specifier: ^29.1.1
         version: 29.4.9(@babel/core@7.29.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@29.7.0)(jest@29.7.0(@types/node@20.19.39))(typescript@5.9.3)
-
-  website:
-    dependencies:
-      markdown-it-mathjax3:
-        specifier: ^4.3.2
-        version: 4.3.2
-      node-fetch:
-        specifier: ^2
-        version: 2.7.0
-      tailwindcss:
-        specifier: ^3.3.3
-        version: 3.4.19
-    devDependencies:
-      '@types/node-fetch':
-        specifier: ^2.6.9
-        version: 2.6.13
-      autoprefixer:
-        specifier: ^10.4.15
-        version: 10.5.0(postcss@8.5.14)
-      postcss:
-        specifier: ^8.4.30
-        version: 8.5.14
-      sass:
-        specifier: ^1.67.0
-        version: 1.99.0
-      vitepress:
-        specifier: ^1.4.1
-        version: 1.6.4(@algolia/client-search@5.52.1)(@types/node@20.19.39)(axios@1.16.0)(markdown-it-mathjax3@4.3.2)(postcss@8.5.14)(sass@1.99.0)(search-insights@2.17.3)(typescript@5.9.3)
 
 packages:
 

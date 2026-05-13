@@ -1,4 +1,3 @@
 packages:
-  - "feishu-docx"
-  - "feishu-pages"
-  - "website"
+  - "packages/*"
+  - "apps/*"
