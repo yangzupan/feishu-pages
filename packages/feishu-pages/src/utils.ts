@@ -63,7 +63,7 @@ export async function uploadToPicList(
     
     console.error(' -> 上传失败:', response.data);
     return null;
-  } catch (error) {
+  } catch (error: any) {
     console.error(' -> PicList 上传错误:', error.message);
     if (error.response) {
       console.error(' -> 响应状态:', error.response.status);
@@ -96,7 +96,7 @@ export const normalizeSlug = (slug: string | number) => {
  * @param dp - 小数位数（默认为 1）
  * @returns 格式化后的文件大小字符串
  */
-export const humanizeFileSize = (bytes, dp = 1) => {
+export const humanizeFileSize = (bytes: string | number, dp = 1) => {
   if (typeof bytes === "string") {
     bytes = parseInt(bytes);
   }
@@ -160,7 +160,7 @@ export function cleanupDocsForJSON(docs: FileDoc[]) {
     // 移除不在允许列表中的字段
     Object.keys(doc).forEach((key) => {
       if (!allowKeys.includes(key)) {
-        delete doc[key];
+        delete (doc as any)[key];
       }
     });
 

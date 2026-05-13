@@ -3,7 +3,7 @@
   "private": true,
   "description": "飞书文档和页面处理工具",
   "author": {
-    "name": "Pange Team"
+    "name": "YangZupan"
   },
   "repository": {
     "type": "git",
@@ -13,15 +13,10 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "build": "pnpm -F feishu-docx build && pnpm -F feishu-pages build",
-    "test": "pnpm -F feishu-docx test && pnpm -F feishu-pages test",
     "export": "pnpm -F feishu-pages dev",
     "dev": "pnpm -F vitepress-demo dev",
-    "clean": "rm -Rf dist/",
     "release:feishu-docx": "pnpm -F @pange/feishu-docx release",
     "release:feishu-pages": "pnpm -F @pange/feishu-pages release",
     "release:all": "pnpm release:feishu-docx && pnpm release:feishu-pages"
-  },
-  "devDependencies": {
-    "autocorrect-node": "^2.8.4"
   }
 }

@@ -9,7 +9,7 @@ if (process.env.VITEPRESS_DOCS_ROOT) {
   srcDir = path.join(process.env.VITEPRESS_DOCS_ROOT, 'docs');
 }
 docsPath = path.resolve(docsPath);
-console.info(`Loading ${docsPath}`);
+// console.info(`Loading ${docsPath}`);
 const docs = JSON.parse(fs.readFileSync(docsPath).toString());
 
 /**

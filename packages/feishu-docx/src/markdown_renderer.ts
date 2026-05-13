@@ -1,3 +1,4 @@
+// @ts-ignore
 import YAML from 'js-yaml';
 import { marked } from 'marked';
 import { markedXhtml } from 'marked-xhtml';
@@ -62,42 +63,42 @@ export class MarkdownRenderer extends Renderer {
         break;
       case BlockType.Heading1:
         buf.write('# ');
-        buf.write(this.parseTextBlock(block, block.heading1).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading1)).trimStart());
         break;
       case BlockType.Heading2:
         buf.write('## ');
-        buf.write(this.parseTextBlock(block, block.heading2).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading2)).trimStart());
         break;
       case BlockType.Heading3:
         buf.write('### ');
-        buf.write(this.parseTextBlock(block, block.heading3).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading3)).trimStart());
         break;
       case BlockType.Heading4:
         buf.write('#### ');
-        buf.write(this.parseTextBlock(block, block.heading4).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading4)).trimStart());
         break;
       case BlockType.Heading5:
         buf.write('##### ');
-        buf.write(this.parseTextBlock(block, block.heading5).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading5)).trimStart());
         break;
       case BlockType.Heading6:
         buf.write('###### ');
-        buf.write(this.parseTextBlock(block, block.heading6).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading6)).trimStart());
         break;
       case BlockType.Heading7:
         buf.write('####### ');
-        buf.write(this.parseTextBlock(block, block.heading7).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading7)).trimStart());
         break;
       case BlockType.Heading8:
         buf.write('######## ');
-        buf.write(this.parseTextBlock(block, block.heading8).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading8)).trimStart());
         break;
       case BlockType.Heading9:
         buf.write('######### ');
-        buf.write(this.parseTextBlock(block, block.heading9).trimStart());
+        buf.write(String(this.parseTextBlock(block, block.heading9)).trimStart());
         break;
       case BlockType.Bullet:
-        buf.write(this.parseBulletBlock(block, indent).trimStart());
+        buf.write(String(this.parseBulletBlock(block, indent)).trimStart());
         break;
       case BlockType.Ordered:
         buf.write(this.parseOrderedBlock(block, indent));
@@ -174,7 +175,7 @@ export class MarkdownRenderer extends Renderer {
    * @returns 如果找到并成功解析元数据则返回 true，否则返回 false
    * @see https://longbridge.github.io/feishu-pages/zh-CN/page-meta
    */
-  parsePageMeta(block: Block) {
+  parsePageMeta(block: Block): any {
     if (block?.block_type !== BlockType.Code) {
       if (block.children?.length > 0) {
         return this.parsePageMeta(this.blockMap[block.children[0]]);
@@ -394,7 +395,7 @@ export class MarkdownRenderer extends Renderer {
     } else if (el.equation) {
       let symbol = inline ? '$' : '$$';
       buf.write(symbol);
-      buf.write(el.equation.content.trimEnd());
+      buf.write(String(el.equation.content).trimEnd());
       buf.write(symbol);
     } else if (el.mention_doc) {
       const node_token = decodeURIComponent(el.mention_doc.token);
@@ -450,13 +451,13 @@ export class MarkdownRenderer extends Renderer {
 
     // 如果纯文本以标点符号（: 或 ：）结尾，则使用 HTML 标签
     if (plainText.match(/[:：]$/)) {
-      if (style.bold) {
+      if (style?.bold) {
         preWrite = '<b>';
         postWrite = '</b>';
-      } else if (style.italic) {
+      } else if (style?.italic) {
         preWrite = '<i>';
         postWrite = '</i>';
-      } else if (style.strikethrough) {
+      } else if (style?.strikethrough) {
         preWrite = '<del>';
         postWrite = '</del>';
       }
@@ -567,9 +568,12 @@ export class MarkdownRenderer extends Renderer {
     const buf = new Buffer();
 
     // 写入表头
-    let headRow = [];
+    let headRow: string[] = [];
     if (table.property?.header_row) {
-      headRow = rows.shift();
+      const shifted = rows.shift();
+      if (shifted) {
+        headRow = shifted;
+      }
     }
     buf.write('|');
     for (let i = 0; i < table.property?.column_size; i++) {
@@ -700,8 +704,11 @@ export class MarkdownRenderer extends Renderer {
 
     // 写入表头
     if (table.property?.header_row) {
-      let headRow = [];
-      headRow = rows.shift();
+      let headRow: string[] = [];
+      const shifted = rows.shift();
+      if (shifted) {
+        headRow = shifted;
+      }
 
       buf.writeln('<thead>');
       buf.write('<tr>');
@@ -860,7 +867,7 @@ export class MarkdownRenderer extends Renderer {
   parseCallout(block: Block): Buffer | string {
     const buf = new Buffer();
 
-    const style = {};
+    const style: Record<string, string> = {};
     const classNames = ['callout'];
 
     if (block.callout.background_color) {
@@ -1027,8 +1034,8 @@ export class MarkdownRenderer extends Renderer {
    * @returns HTML 字符串
    */
   markdownToHTML(markdown: string): string {
-    let html = marked.parse(markdown, { gfm: true, breaks: true });
-    return html;
+    const html = marked.parse(markdown, { gfm: true, breaks: true });
+    return String(html);
   }
 
   /**

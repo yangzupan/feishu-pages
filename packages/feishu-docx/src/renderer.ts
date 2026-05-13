@@ -44,11 +44,11 @@ export class Renderer {
 
     this.documentId = doc?.document?.document_id || '';
     this.fileTokens = {};
-    doc?.blocks?.forEach((block) => {
+    doc?.blocks?.forEach((block: any) => {
       this.blockMap[block?.block_id] = block;
     });
     this.debug = debug;
-    this.outputUnsupported = outputUnsupported;
+    this.outputUnsupported = outputUnsupported ?? false;
   }
 
   /**

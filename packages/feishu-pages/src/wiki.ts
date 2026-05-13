@@ -58,7 +58,7 @@ export const fetchAllDocs = async (
       depth: depth,
       title: rootNode.title,
       node_token: rootNode.node_token,
-      parent_node_token: null,
+      parent_node_token: undefined,
       obj_create_time: rootNode.obj_create_time,
       obj_edit_time: rootNode.obj_edit_time,
       obj_token: rootNode.obj_token,

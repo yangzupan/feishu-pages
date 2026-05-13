@@ -18,9 +18,14 @@ import { printMemoryUsage, writeTemplfile } from './utils.js';
 export const fetchDocBody = async (fileDoc: Doc): Promise<{ contentFile: string; meta: Record<string, any>; fileTokens: Record<string, any>; hasCache: boolean }> => {
   let document_id = fileDoc.obj_token;
 
-  const doc = {
+  const doc: {
     document: {
-      document_id,
+      document_id: string;
+    };
+    blocks: any[];
+  } = {
+    document: {
+      document_id: document_id!,
     },
     blocks: [],
   };
@@ -71,7 +76,7 @@ export const fetchDocBody = async (fileDoc: Doc): Promise<{ contentFile: string;
   };
 
 
-  let { blocks, hasCache } = await fetchDocBlocks(document_id);
+  let { blocks, hasCache } = await fetchDocBlocks(document_id!);
 
   doc.blocks = blocks;
   printMemoryUsage('已加载文档块');
@@ -86,7 +91,7 @@ export const fetchDocBody = async (fileDoc: Doc): Promise<{ contentFile: string;
 
   return {
     contentFile: tmp_filename,
-    meta,
+    meta: meta || {},
     fileTokens,
     hasCache,
   };

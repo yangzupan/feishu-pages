@@ -82,16 +82,44 @@ const feishuConfig = {
  * 验证 FEISHU_APP_ID、FEISHU_APP_SECRET 和 FEISHU_SPACE_ID 是否已设置
  */
 const checkEnv = () => {
+  // 检查 .env 文件是否存在（可选的友好提示）
+  const envFilePath = path.resolve(process.cwd(), '.env');
+  if (!fs.existsSync(envFilePath)) {
+    console.warn('⚠️  警告: 未找到 .env 文件');
+    console.warn('   请确保在项目根目录创建 .env 文件并配置必要的环境变量');
+    console.warn('   您可以复制 .env.default 文件作为模板: cp .env.default .env\n');
+  }
+
+  const missingVars: string[] = [];
+  
   if (!feishuConfig.appId) {
-    throw new Error("FEISHU_APP_ID is required");
+    missingVars.push('FEISHU_APP_ID');
   }
 
   if (!feishuConfig.appSecret) {
-    throw new Error("FEISHU_APP_SECRET is required");
+    missingVars.push('FEISHU_APP_SECRET');
   }
 
   if (!feishuConfig.spaceId) {
-    throw new Error("FEISHU_SPACE_ID is required");
+    missingVars.push('FEISHU_SPACE_ID');
+  }
+
+  if (missingVars.length > 0) {
+    console.error('❌ 错误: 缺少以下必需的环境变量:');
+    missingVars.forEach(varName => {
+      console.error(`   - ${varName}`);
+    });
+    
+    console.error('\n📝 请按以下步骤配置:');
+    console.error('   1. 在项目根目录创建 .env 文件');
+    console.error('   2. 从飞书开放平台获取应用凭证');
+    console.error('   3. 在 .env 文件中设置以下变量:');
+    console.error('      FEISHU_APP_ID=your_app_id_here');
+    console.error('      FEISHU_APP_SECRET=your_app_secret_here');
+    console.error('      FEISHU_SPACE_ID=your_space_id_here');
+    console.error('\n🔗 更多信息请参考项目文档或 .env.default 文件');
+    
+    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
   }
 };
 
@@ -135,7 +163,7 @@ export const fetchTenantAccessToken = async () => {
  * @param token - 要掩码的 Token 字符串
  * @returns 掩码后的 Token 字符串
  */
-export const maskToken = (token) => {
+export const maskToken = (token: string) => {
   const len = token.length;
   const mashLen = len * 0.6;
   return (
@@ -146,7 +174,7 @@ export const maskToken = (token) => {
 };
 
 /** 速率限制计数器 */
-const RATE_LIMITS = {};
+const RATE_LIMITS: Record<number, number> = {};
 
 /**
  * 请求等待函数
@@ -217,7 +245,7 @@ axios.interceptors.response.use(
  * @param payload - 请求参数
  * @returns 响应数据
  */
-export const feishuFetch = async (method, path, payload): Promise<any> => {
+export const feishuFetch = async (method: string, path: string, payload: Record<string, any>): Promise<any> => {
   const authorization = `Bearer ${feishuConfig.tenantAccessToken}`;
   const headers = {
     Authorization: authorization,
@@ -285,12 +313,12 @@ export const feishuDownload = async (
   const cacheFileMetaPath = path.join(CACHE_DIR, `${fileToken}.headers.json`);
   fs.mkdirSync(CACHE_DIR, { recursive: true });
 
-  let res: { data?: fs.ReadStream; headers?: Record<string, any> } = {};
+  let res: { data?: fs.ReadStream; headers?: Record<string, any> } | null = null;
   let hasCache = false;
   // 画板文件无法缓存，因为无法获取 content-length
   let canCache = type != 'board' || hasDocCache;
 
-  let cacheFileHeaders = {};
+  let cacheFileHeaders: Record<string, any> = {};
   try {
     cacheFileHeaders = JSON.parse(fs.readFileSync(cacheFileMetaPath, "utf-8"));
   } catch {}
@@ -302,12 +330,12 @@ export const feishuDownload = async (
     canCache
   ) {
     hasCache = true;
-    res.headers = cacheFileHeaders;
+    res = { headers: cacheFileHeaders };
     console.info(" -> 缓存命中:", fileToken);
   } else {
     console.info("正在下载文件", fileToken, "...");
     console.info("文件类型为", type, "...");
-    res = await axios
+    const downloadResult = await axios
       .get(
         type === "board" ?
           `${feishuConfig.endpoint}/open-apis/board/v1/whiteboards/${fileToken}/download_as_image` :
@@ -320,29 +348,30 @@ export const feishuDownload = async (
           },
         },
       )
-      .then((res: AxiosResponse) => {
-        if (res.status !== 200) {
+      .then((axiosRes: AxiosResponse) => {
+        if (axiosRes.status !== 200) {
           console.error(
             " -> 错误: 下载文件失败:",
             fileToken,
-            res.status,
+            axiosRes.status,
           );
           return null;
         }
 
-        if (res.headers["Content-Length"] && res.headers["Content-Length"] == cacheContentLength) {
+        if (axiosRes.headers["Content-Length"] && axiosRes.headers["Content-Length"] == cacheContentLength) {
           console.info(" -> 缓存命中", fileToken);
           hasCache = true;
+          return { headers: axiosRes.headers };
         } else {
           // 写入缓存信息
-          fs.writeFileSync(cacheFileMetaPath, JSON.stringify(res.headers));
+          fs.writeFileSync(cacheFileMetaPath, JSON.stringify(axiosRes.headers));
 
           return new Promise((resolve: any, reject: any) => {
             const writer = fs.createWriteStream(cacheFilePath);
-            res.data.pipe(writer);
+            axiosRes.data.pipe(writer);
             writer.on("finish", () => {
               resolve({
-                headers: res.headers,
+                headers: axiosRes.headers,
               });
             });
             writer.on("error", (e) => {
@@ -364,12 +393,14 @@ export const feishuDownload = async (
           console.error(
             `无文件下载权限时接口将返回 403 的 HTTP 状态码。\nhttps://open.feishu.cn/document/server-docs/docs/drive-v1/faq#6e38a6de\nhttps://open.feishu.cn/document/server-docs/docs/drive-v1/download/download`,
           );
-          return null;
         }
-      });
+        return null;
+      }) as { data?: fs.ReadStream; headers?: Record<string, any> } | null;
+    
+    res = downloadResult;
   }
 
-  if (!res) {
+  if (!res || !res.headers) {
     return null;
   }
 

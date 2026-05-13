@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { FileToken } from '@pange/feishu-docx';
+// @ts-ignore
 import fs from 'fs';
+// @ts-ignore
 import path from 'path';
 import { fetchDocBody, generateFrontmatter } from './doc.js';
 import {
@@ -138,6 +140,12 @@ const fetchDocAndWriteFile = async (
 
     let { contentFile, fileTokens } = doc;
 
+    // 确保 contentFile 存在
+    if (!contentFile) {
+      console.warn(`文档 ${doc.title} 没有内容文件，跳过处理`);
+      continue;
+    }
+
     let content = fs.readFileSync(contentFile, 'utf-8');
 
     // 替换内部文档链接为正确的 URL
@@ -156,7 +164,7 @@ const fetchDocAndWriteFile = async (
     let out = '';
     out += metaInfo + '\n\n';
 
-    content = await downloadFiles(content, fileTokens, doc.hasCache);
+    content = await downloadFiles(content, fileTokens, doc.hasCache || false);
 
     out += content;
 
