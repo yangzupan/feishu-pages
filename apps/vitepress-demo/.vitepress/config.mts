@@ -43,6 +43,9 @@ const convertDocsToSidebars = (
 
 const docsSidebarEN = convertDocsToSidebars(docs, 'en');
 const docsSidebarZHCN = convertDocsToSidebars(docs, 'zh-CN');
+console.log(docsSidebarZHCN);
+
+
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -84,10 +87,7 @@ export default defineConfig({
       },
     ],
 
-    sidebar: {
-      en: docsSidebarEN,
-      'zh-CN': docsSidebarZHCN,
-    },
+    sidebar: docsSidebarZHCN,
     socialLinks: [
       { icon: 'github', link: 'https://github.com/longbridge/feishu-pages' },
     ],

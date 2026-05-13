@@ -7,6 +7,9 @@ import {
   BASE_URL,
   DOCS_DIR,
   OUTPUT_DIR,
+  PICLIST_API_URL,
+  PICLIST_ENABLED,
+  PICLIST_KEY,
   ROOT_NODE_TOKEN,
   SKIP_ASSETS,
   feishuConfig,
@@ -19,6 +22,7 @@ import {
   cleanupTmpFiles,
   humanizeFileSize,
   replaceLinks,
+  uploadToPicList,
 } from './utils.js';
 import { fetchAllDocs } from './wiki.js';
 
@@ -47,7 +51,8 @@ const fetchDocBodies = async (docs: FileDoc[]) => {
  * 下载文档中的资源文件
  * 
  * 遍历文档中的文件令牌，下载图片、文件和画板等资源，
- * 并将文档内容中的引用链接替换为本地路径。
+ * 并根据配置决定是否上传到 PicList 图床。
+ * 最后将文档内容中的引用链接替换为本地路径或图床 URL。
  * 
  * @param content - 文档 Markdown 内容
  * @param fileTokens - 文件令牌映射表
@@ -81,8 +86,18 @@ const downloadFiles = async (
     }
 
     const extension = path.extname(filePath);
-
     let assetURL = `/assets/${base_filename}${extension}`;
+
+    // 如果启用了 PicList 且是图片类型，则上传到图床
+    if (PICLIST_ENABLED && fileTokens[fileToken].type === 'image') {
+      const picListUrl = await uploadToPicList(filePath, PICLIST_API_URL, PICLIST_KEY);
+      if (picListUrl) {
+        assetURL = picListUrl;
+        console.info(' -> 使用图床 URL:', assetURL);
+      } else {
+        console.warn(' -> PicList 上传失败，使用本地路径');
+      }
+    }
 
     content = replaceLinks(content, fileToken, assetURL);
   }
@@ -136,7 +151,7 @@ const fetchDocAndWriteFile = async (
       }
     }
 
-    const metaInfo = generateFrontmatter(doc, doc.slug, doc.position);
+    const metaInfo = generateFrontmatter(doc, doc.slug, doc.position, doc.obj_create_time, doc.obj_edit_time);
 
     let out = '';
     out += metaInfo + '\n\n';

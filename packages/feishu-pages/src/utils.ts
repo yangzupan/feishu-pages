@@ -1,3 +1,4 @@
+import axios from "axios";
 import fs from "fs";
 import { marked } from "marked";
 import { markedXhtml } from "marked-xhtml";
@@ -6,6 +7,71 @@ import path from "path";
 import { FileDoc } from "./summary";
 
 marked.use(markedXhtml());
+
+
+/**
+ * 通过 PicList 上传图片到图床
+ * 
+ * 调用 PicList API 将本地图片上传到配置的图床服务
+ * 
+ * @param filePath - 本地图片文件路径
+ * @param apiUrl - PicList API 地址
+ * @param key - PicList API 密钥（可选）
+ * @returns 上传后的图片 URL，如果失败则返回 null
+ */
+export async function uploadToPicList(
+  filePath: string,
+  apiUrl: string = 'http://127.0.0.1:36677',
+  key?: string
+): Promise<string | null> {
+  try {
+    console.info(' -> 正在通过 PicList 上传图片:', filePath);
+    
+    // 构建请求 URL，如果有 key 则添加到查询参数
+    let uploadUrl = `${apiUrl}/upload`;
+    if (key) {
+      uploadUrl += `?key=${encodeURIComponent(key)}`;
+    }
+    
+    // 使用 axios 直接上传文件，axios 会自动处理 multipart/form-data
+    const response = await axios.post(
+      uploadUrl,
+      {
+        file: fs.createReadStream(filePath),
+      },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
+      }
+    );
+    
+    if (response.data && response.data.success) {
+      // PicList 返回的 result 是 URL 数组
+      const imageUrl = response.data.result?.[0] || 
+                      response.data.url || 
+                      response.data.images?.[0]?.url ||
+                      response.data.fullResult?.[0]?.imgUrl ||
+                      response.data.fullResult?.[0]?.shortUrl;
+      if (imageUrl) {
+        console.info(' -> 上传成功:', imageUrl);
+        return imageUrl;
+      }
+    }
+    
+    console.error(' -> 上传失败:', response.data);
+    return null;
+  } catch (error) {
+    console.error(' -> PicList 上传错误:', error.message);
+    if (error.response) {
+      console.error(' -> 响应状态:', error.response.status);
+      console.error(' -> 响应数据:', error.response.data);
+    }
+    return null;
+  }
+}
 
 /**
  * 标准化 slug

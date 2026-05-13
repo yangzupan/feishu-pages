@@ -47,6 +47,17 @@ export const URL_STYLE = process.env.URL_STYLE || "nested";
  */
 export const SKIP_ASSETS = process.env.SKIP_ASSETS || false;
 
+/**
+ * PicList 图床配置
+ * 
+ * PICLIST_ENABLED: 是否启用 PicList 上传（true/false）
+ * PICLIST_API_URL: PicList API 地址（默认 http://127.0.0.1:36677）
+ * PICLIST_KEY: PicList API 密钥（可选）
+ */
+export const PICLIST_ENABLED = process.env.PICLIST_ENABLED === 'true' || process.env.PICLIST_ENABLED === '1';
+export const PICLIST_API_URL = process.env.PICLIST_API_URL || 'http://127.0.0.1:36677';
+export const PICLIST_KEY = process.env.PICLIST_KEY || '';
+
 /** 飞书配置对象 */
 const feishuConfig = {
   /** 飞书 API 端点 */

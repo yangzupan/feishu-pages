@@ -96,23 +96,29 @@ export const fetchDocBody = async (fileDoc: Doc): Promise<{ contentFile: string;
  * 生成 Markdown Frontmatter
  * 
  * 根据文档信息和 URL 路径生成 YAML 格式的 frontmatter。
- * Frontmatter 包含标题、slug、侧边栏位置等元数据。
+ * Frontmatter 包含标题、slug、侧边栏位置、创建时间和编辑时间等元数据。
  * 
  * @param doc - 文档对象
  * @param urlPath - URL 路径（slug）
  * @param position - 侧边栏位置
+ * @param createTime - 文档创建时间（可选）
+ * @param editTime - 文档编辑时间（可选）
  * @returns YAML 格式的 frontmatter 字符串（包含 --- 分隔符）
  */
 export const generateFrontmatter = (
   doc: Doc,
   urlPath: string,
-  position: number
+  position: number,
+  createTime?: string,
+  editTime?: string
 ) => {
   const meta = Object.assign(
     {
       title: doc.title,
       slug: urlPath,
       sidebar_position: position,
+      date: createTime,
+      update: editTime,
     },
     doc.meta || {}
   );
