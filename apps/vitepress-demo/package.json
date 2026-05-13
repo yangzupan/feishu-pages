@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "feishu-pages": "feishu-pages",
+    "fsp": "feishu-pages",
     "dev": "vitepress dev",
     "build": "vitepress build",
     "generate-releases": "node generate-releases.js",

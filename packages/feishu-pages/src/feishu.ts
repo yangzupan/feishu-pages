@@ -5,75 +5,57 @@ import "dotenv/config";
 import fs from "fs";
 import mime from "mime-types";
 import path from "path";
+import {
+  BASE_URL,
+  CACHE_DIR,
+  DOCS_DIR,
+  FEISHU_APP_ID,
+  FEISHU_APP_SECRET,
+  FEISHU_ENDPOINT,
+  FEISHU_LOG_LEVEL,
+  FEISHU_SPACE_ID,
+  OUTPUT_DIR,
+  PICLIST_API_URL,
+  PICLIST_ENABLED,
+  PICLIST_KEY,
+  ROOT_NODE_TOKEN,
+  SKIP_ASSETS,
+  TMP_DIR,
+  URL_STYLE,
+} from './config.js';
 import { humanizeFileSize } from "./utils.js";
 
-/** 输出目录路径 */
-export const OUTPUT_DIR: string = path.resolve(
-  process.env.OUTPUT_DIR || "./dist",
-);
-/** 文档输出目录路径 */
-export const DOCS_DIR: string = path.join(OUTPUT_DIR, "docs");
-
-let baseUrl = process.env.BASE_URL || process.env.URL_PREFIX || "/";
-if (!baseUrl.endsWith("/")) {
-  baseUrl += "/";
-}
-/** 基础 URL */
-export const BASE_URL: string = baseUrl;
-/** 根节点令牌 */
-export const ROOT_NODE_TOKEN: string = process.env.ROOT_NODE_TOKEN || "";
-/** 缓存目录路径 */
-export const CACHE_DIR = path.resolve(
-  process.env.CACHE_DIR || path.join(OUTPUT_DIR, ".cache"),
-);
-/** 临时目录路径 */
-export const TMP_DIR = path.resolve(
-  process.env.TMP_DIR || path.join(OUTPUT_DIR, ".tmp"),
-);
-
-/**
- * URL 样式配置
- * 
- * "original" - 使用原始 token 作为 URL：/G5JwdLWUkopngoxfQtIc7EFSnIg
- * "nested" - 使用嵌套 slug 作为 URL：/slug1/slug2/slug3
- * 
- * 默认值："nested"
- */
-export const URL_STYLE = process.env.URL_STYLE || "nested";
-/**
- * 是否跳过下载资源文件
- * 
- * 用于调试时加快速度
- */
-export const SKIP_ASSETS = process.env.SKIP_ASSETS || false;
-
-/**
- * PicList 图床配置
- * 
- * PICLIST_ENABLED: 是否启用 PicList 上传（true/false）
- * PICLIST_API_URL: PicList API 地址（默认 http://127.0.0.1:36677）
- * PICLIST_KEY: PicList API 密钥（可选）
- */
-export const PICLIST_ENABLED = process.env.PICLIST_ENABLED === 'true' || process.env.PICLIST_ENABLED === '1';
-export const PICLIST_API_URL = process.env.PICLIST_API_URL || 'http://127.0.0.1:36677';
-export const PICLIST_KEY = process.env.PICLIST_KEY || '';
+// 重新导出配置项，保持向后兼容
+export {
+  BASE_URL,
+  CACHE_DIR,
+  DOCS_DIR,
+  OUTPUT_DIR,
+  PICLIST_API_URL,
+  PICLIST_ENABLED,
+  PICLIST_KEY,
+  ROOT_NODE_TOKEN,
+  SKIP_ASSETS,
+  TMP_DIR,
+  URL_STYLE,
+};
 
 /** 飞书配置对象 */
 const feishuConfig = {
   /** 飞书 API 端点 */
-  endpoint: process.env.FEISHU_ENDPOINT || "https://open.feishu.cn",
+  endpoint: FEISHU_ENDPOINT,
   /**
    * 飞书应用 App ID
    * 
    * 环境变量：`FEISHU_APP_ID`
    */
-  appId: process.env.FEISHU_APP_ID,
+  appId: FEISHU_APP_ID,
   /**
    * 飞书应用 App Secret
    * 
    * 环境变量：`FEISHU_APP_SECRET`
    */
-  appSecret: process.env.FEISHU_APP_SECRET,
+  appSecret: FEISHU_APP_SECRET,
 
   /**
    * 飞书应用 Tenant Access Token
@@ -89,9 +71,9 @@ const feishuConfig = {
    * 
    * 环境变量：`FEISHU_SPACE_ID`
    */
-  spaceId: process.env.FEISHU_SPACE_ID,
+  spaceId: FEISHU_SPACE_ID,
   /** 日志级别 */
-  logLevel: process.env.FEISHU_LOG_LEVEL || "2",
+  logLevel: String(FEISHU_LOG_LEVEL),
 };
 
 /**
