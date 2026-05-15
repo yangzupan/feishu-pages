@@ -24,7 +24,8 @@ import {
   getCodeLanguage,
 } from './types.js';
 
-marked.use(markedXhtml());
+// 使用类型断言解决 marked-xhtml 与 marked 18.x 的类型兼容性问题
+marked.use(markedXhtml() as any);
 
 /**
  * Markdown 渲染器

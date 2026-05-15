@@ -4,6 +4,30 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@types/node':
+      specifier: ^25.7.0
+      version: 25.7.0
+    js-yaml:
+      specifier: ^4.1.1
+      version: 4.1.1
+    marked:
+      specifier: ^18.0.3
+      version: 18.0.3
+    marked-xhtml:
+      specifier: ^1.0.15
+      version: 1.0.15
+    tsup:
+      specifier: ^8.5.1
+      version: 8.5.1
+    typescript:
+      specifier: ^6.0.3
+      version: 6.0.3
+    vitepress:
+      specifier: ^1.6.4
+      version: 1.6.4
+
 importers:
 
   .: {}
@@ -33,7 +57,7 @@ importers:
         specifier: ^8.4.30
         version: 8.5.14
       sass:
-        specifier: ^1.67.0
+        specifier: ^1.83.0
         version: 1.99.0
       vitepress:
         specifier: 'catalog:'
@@ -91,6 +115,9 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
+      '@types/mime-types':
+        specifier: ^3.0.1
+        version: 3.0.1
       '@types/node':
         specifier: 'catalog:'
         version: 25.7.0
@@ -893,6 +920,9 @@ packages:
 
   '@types/mdurl@2.0.0':
     resolution: {integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==}
+
+  '@types/mime-types@3.0.1':
+    resolution: {integrity: sha512-xRMsfuQbnRq1Ef+C+RKaENOxXX87Ygl38W1vDfPHRku02TgQr+Qd8iivLtAMcR0KF5/29xlnFihkTlbqFrGOVQ==}
 
   '@types/node-fetch@2.6.13':
     resolution: {integrity: sha512-QGpRVpzSaUs30JBSGPjOg4Uveu384erbHBoT1zeONvyCfwQxIkUshLAOqN/k9EjGviPRmWTTe6aH2qySWKTVSw==}
@@ -2700,6 +2730,8 @@ snapshots:
       '@types/unist': 3.0.3
 
   '@types/mdurl@2.0.0': {}
+
+  '@types/mime-types@3.0.1': {}
 
   '@types/node-fetch@2.6.13':
     dependencies:
