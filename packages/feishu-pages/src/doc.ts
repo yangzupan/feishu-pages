@@ -122,8 +122,8 @@ export const generateFrontmatter = (
       title: doc.title,
       slug: urlPath,
       sidebar_position: position,
-      date: createTime,
-      update: editTime,
+      createTime: createTime,
+      lastUpdated: editTime,
     },
     doc.meta || {}
   );
